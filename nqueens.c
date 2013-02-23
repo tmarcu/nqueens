@@ -1,9 +1,14 @@
+/*
+ * nqueens.c
+ * Copyright (C) 2013 Tudor Marcu. All rights reserved.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-void rotateboard();
-int checkiso();
+void rotateboard(int *);
+int checkiso(void);
 
 int *board;
 int n, count;
@@ -38,7 +43,7 @@ int comparevec(int *v1, int *v2)
 
 void solveboard(int row)
 {
-	int column, i;
+	int column;
 
 	if (row == n) {
 		if (checkiso() != 0) {
@@ -88,8 +93,13 @@ int checkiso()
 		else
 			mirror(transform);
 		iso = comparevec(board, transform);
-		if (!iso) return 0;
+		if (!iso) {
+			free(transform);
+			return 0;
+		}
 	}
+	free(transform);
+
 	return 1;
 }
 int main(int argc, char *argv[])
@@ -104,5 +114,8 @@ int main(int argc, char *argv[])
 
 	solveboard(0);
 	printf("# of boards: %d\n", count);
+
+	free(board);
+
 	return 0;
 }	
